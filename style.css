@@ -1,0 +1,149 @@
+/* ---------- Design tokens ---------- */
+:root {
+  --page-bg: #d5dbe0;
+  --shell-bg: #2b353e;
+  --lcd-bg: #c9d5b5;
+  --lcd-text: #1a2416;
+  --lcd-dim: #4d5a44;
+
+  --num-bg: #f4f6f7;
+  --num-bg-hover: #ffffff;
+  --num-text: #1c2730;
+
+  --fn-bg: #a9b8c4;
+  --fn-bg-hover: #bccad4;
+  --fn-text: #14202a;
+
+  --op-bg: #35657f;
+  --op-bg-hover: #417a99;
+  --op-text: #ffffff;
+
+  --eq-bg: #e3a127;
+  --eq-bg-hover: #f0b13c;
+  --eq-text: #2a1c00;
+
+  --key-shadow: rgba(0, 0, 0, 0.3);
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-lcd: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-ui);
+  background: var(--page-bg);
+}
+
+/* ---------- Layout: centre the calculator ---------- */
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+}
+
+.calculator {
+  width: 100%;
+  max-width: 360px;
+  padding: 16px;
+  background: var(--shell-bg);
+  border-radius: 24px;
+  box-shadow: 0 18px 40px rgba(20, 30, 40, 0.28), 0 2px 6px rgba(20, 30, 40, 0.2);
+}
+
+/* ---------- Display ---------- */
+.display {
+  margin-bottom: 16px;
+  padding: 10px 14px 12px;
+  background: var(--lcd-bg);
+  color: var(--lcd-text);
+  border-radius: 12px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-lcd);
+  text-align: right;
+  overflow: hidden;
+}
+
+.display__expression {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--lcd-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.display__result {
+  display: block;
+  min-height: 1.3em;
+  line-height: 1.3;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.9rem, 9vw, 2.4rem);
+}
+
+/* Font size steps down as the number gets longer (set from JavaScript) */
+.display__result[data-size="sm"] { font-size: clamp(1.4rem, 6.5vw, 1.8rem); }
+.display__result[data-size="xs"] { font-size: 1.1rem; }
+.display__result[data-error="true"] { font-size: clamp(1.1rem, 5.5vw, 1.4rem); }
+
+/* ---------- Keypad ---------- */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.key {
+  height: clamp(48px, 9vh, 64px);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  font: 600 1.4rem/1 var(--font-ui);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: 0 3px 0 var(--key-shadow);
+  transition: background-color 80ms linear, transform 60ms linear, box-shadow 60ms linear;
+}
+
+.key:active,
+.key.is-pressed {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--key-shadow);
+}
+
+.key:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.key--num { background: var(--num-bg); color: var(--num-text); }
+.key--num:hover { background: var(--num-bg-hover); }
+
+.key--fn { background: var(--fn-bg); color: var(--fn-text); font-size: 1.2rem; }
+.key--fn:hover { background: var(--fn-bg-hover); }
+
+.key--op { background: var(--op-bg); color: var(--op-text); font-size: 1.6rem; }
+.key--op:hover { background: var(--op-bg-hover); }
+
+.key--eq { background: var(--eq-bg); color: var(--eq-text); font-size: 1.6rem; }
+.key--eq:hover { background: var(--eq-bg-hover); }
+
+@media (max-width: 360px) {
+  .calculator { padding: 12px; border-radius: 20px; }
+  .keypad { gap: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .key { transition: none; }
+}
